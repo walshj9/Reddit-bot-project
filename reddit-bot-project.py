@@ -14,14 +14,14 @@ evlis_passw = info[4]
 agent = 'school_project-bot by /u/school_project-bot'
 
 #logs into reddit
-def reddit_login():
-    
+def login():
     redditauth= praw.Reddit(client_id = acc_id,
-                        client_secret = acc_secret,
-                        password = pw,
-                        user_agent= agent,
-                        username= uname)
+                     client_secret = acc_secret,
+                     password = pw,
+                     user_agent= agent,
+                     username= uname)
     return redditauth.user.me()
+
 #gets suthorization link
 def get_auth_link():
     auth_link = praw.Reddit(client_id= acc_id,
@@ -29,5 +29,13 @@ def get_auth_link():
                         redirect_uri = 'http://localhost:8080',
                         user_agent = agent )
     return auth_link.auth.url(['identity'], '...', 'permanent')
+
+reddit = praw.Reddit(user_agent=agent,
+                     client_id=acc_id, client_secret=acc_secret,
+                     username=uname, password=pw)
+
+for submission in reddit.subreddit('all').hot(limit=30):
+    print(submission.score)
+    print("\n")
 
 print("\nPass")
