@@ -35,7 +35,8 @@ reddit = praw.Reddit(user_agent=agent,
                      username=uname, password=pw)
 
 for submission in reddit.subreddit('all').hot(limit=30):
+    print(submission.title)
     print(submission.score)
-    print("\n")
+    print(submission.is_original_content)
 
 print("\nPass")
