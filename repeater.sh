@@ -4,9 +4,6 @@ cd ..
 cd ..
 source final_project/bin/activate
 cd Project/Reddit-bot-project/
-echo "Worked"
-
-
 
 
 while :
