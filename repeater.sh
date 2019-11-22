@@ -1,8 +1,17 @@
 #!/bin/bash
 
+cd ..
+cd ..
+source final_project/bin/activate
+cd Project/Reddit-bot-project/
+echo "Worked"
+
+
+
+
 while :
 do
 	python3 reddit-bot-project.py
 	echo "Press Ctrl+C to stop loop excecution"
-	sleep 20
+	sleep 15
 done
