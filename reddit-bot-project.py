@@ -1,42 +1,46 @@
 import os
-import praw
 import sys
+import csv
+import praw
 
-with open('../reddit-bot-data.txt') as f:
-    info = f.read().splitlines()
+
+with open('../reddit-bot-data.txt') as log_files:
+    info = log_files.read().splitlines()
 
 
 uname = info[0]
 pw = info[1]
 acc_id = info[2]
 acc_secret = info[3]
-evlis_passw = info[4]
 agent = 'school_project-bot by /u/school_project-bot'
 
 #logs into reddit
-def login():
-    redditauth= praw.Reddit(client_id = acc_id,
-                     client_secret = acc_secret,
-                     password = pw,
-                     user_agent= agent,
-                     username= uname)
-    return redditauth.user.me()
+redditauth= praw.Reddit(client_id = acc_id,
+                 client_secret = acc_secret,
+                 password = pw,
+                 user_agent= agent,
+                 username= uname)
+redditauth.user.me()
 
 #gets suthorization link
-def get_auth_link():
-    auth_link = praw.Reddit(client_id= acc_id,
-                        client_secret = acc_secret,
-                        redirect_uri = 'http://localhost:8080',
-                        user_agent = agent )
-    return auth_link.auth.url(['identity'], '...', 'permanent')
+auth_link = praw.Reddit(client_id= acc_id,
+                    client_secret = acc_secret,
+                    redirect_uri = 'http://localhost:8080',
+                    user_agent = agent )
+auth_link.auth.url(['identity'], '...', 'permanent')
 
 reddit = praw.Reddit(user_agent=agent,
                      client_id=acc_id, client_secret=acc_secret,
                      username=uname, password=pw)
 
-for submission in reddit.subreddit('all').hot(limit=30):
-    print(submission.title)
-    print(submission.score)
-    print(submission.is_original_content)
+tot_score = 0
+with open('testcsv.csv', 'w', newline='') as f:
+    fieldnames = ['ID', 'Subreddit', 'Karma']
+    thewriter = csv.DictWriter(f, fieldnames)
+    thewriter.writeheader()
+    for submission in reddit.subreddit('all').hot(limit=5):
+        thewriter.writerow({'ID' : submission.id, 'Subreddit': submission.subreddit, 'Karma':submission.score})
+        tot_score = tot_score + submission.score
 
+print("Average karma: ", tot_score/5)
 print("\nPass")
