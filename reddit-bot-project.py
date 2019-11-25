@@ -34,23 +34,31 @@ reddit = praw.Reddit(user_agent=agent,
                      username=uname, password=pw)
 
 tot_score = 0
-with open('testcsv.csv', 'a+', newline='') as f:
+
+with open('dummycsv.csv', 'r+', newline= '') as f:
     fieldnames = ['ID', 'Subreddit', 'Karma']
     thewriter = csv.DictWriter(f, fieldnames)
     thewriter.writeheader()
     reader = csv.DictReader(f, delimiter=',')
-    
-    for row in f:
+    for row in reader:
         iden = row['ID']
         sub = row['Subreddit']
-        karma = row['Karma']
+        score = row['Karma']
+        for submission in reddit.subreddit('all').hot(limit=5):
+            if iden == submission.id:
+                thewriter.write("{},{},{}".format(iden, sub, submission.score))
 
-    for submission in reddit.subreddit('all').hot(limit=5):
-        if iden == submission.id:
-            f.write("{},{},{}".format(iden, sub, submission.score))
-        else:
-            thewriter.writerow({'ID' : submission.id, 'Subreddit': submission.subreddit, 'Karma':submission.score})
+        #f.read()
+        #print(submission.id)
+
+        #for row in f:
+        #    print(row)
+        #    if submission.id in row[0]:
+        #        row[2] = submission.score
+            else:
+                thewriter.writerow({'ID' : submission.id, 'Subreddit': submission.subreddit, 'Karma':submission.score})
         tot_score = tot_score + submission.score
 f.close()
+
 print("Average karma: ", tot_score/5)
 print("\nPass")
