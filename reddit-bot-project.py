@@ -1,4 +1,4 @@
-import os
+import os.path
 import sys
 import csv
 import praw
@@ -34,31 +34,27 @@ reddit = praw.Reddit(user_agent=agent,
                      username=uname, password=pw)
 
 tot_score = 0
-
-with open('dummycsv.csv', 'r+', newline= '') as f:
-    fieldnames = ['ID', 'Subreddit', 'Karma']
-    thewriter = csv.DictWriter(f, fieldnames)
-    thewriter.writeheader()
-    reader = csv.DictReader(f, delimiter=',')
-    for row in reader:
-        iden = row['ID']
-        sub = row['Subreddit']
-        score = row['Karma']
-        for submission in reddit.subreddit('all').hot(limit=5):
-            if iden == submission.id:
-                thewriter.write("{},{},{}".format(iden, sub, submission.score))
-
-        #f.read()
-        #print(submission.id)
-
-        #for row in f:
-        #    print(row)
-        #    if submission.id in row[0]:
-        #        row[2] = submission.score
-            else:
-                thewriter.writerow({'ID' : submission.id, 'Subreddit': submission.subreddit, 'Karma':submission.score})
-        tot_score = tot_score + submission.score
+exists = os.path.isfile('dummycsv.csv')
+with open('dummycsv.csv', 'r+', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(['ID','Subreddit', 'Karma'])
+    reader = csv.reader(f)
+    data_list = list(reader)
+    for submission in reddit.subreddit('all').hot(limit=5):
+        line = [submission.id, submission.subreddit.display_name, str(submission.score)]    
+        for row in data_list:#
+            if str(row[0]) == str(submission.id) :#
+                print("Removing: ", row)
+                data_list.remove(row)
+                data_list.append(line)
+            else:#
+                data_list.append(line)
+                
+    rf = csv.writer(f, dialect='excel')
+    rf.writerows(data_list)
+    #tot_score = tot_score + submission.score
 f.close()
 
+#print(data_list)
 print("Average karma: ", tot_score/5)
 print("\nPass")
