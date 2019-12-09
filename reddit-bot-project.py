@@ -22,7 +22,7 @@ with open('reddit_data.csv','w') as f:
     writer.writerow(['ID','Title','Subreddit','Karma', 'No. of comments', 'OC', 'Upvote ratio', 'NSFW', 'Link'])
     lists = []
     for submission in reddit.subreddit('all').hot(limit=150):
-        line = [str(submission.id),str(submission.title),str(submission.subreddit.display_name), int(submission.score),int(submission.num_comments), str(submission.is_original_content), float(submission.upvote_ratio), submission.over_18, submission.permalink]
+        line = [str(submission.id),str(submission.title).replace(',',''),str(submission.subreddit.display_name), int(submission.score),int(submission.num_comments), str(submission.is_original_content), float(submission.upvote_ratio), submission.over_18, submission.permalink]
         lists.append(line)
     rf = csv.writer(f, dialect='excel')
     rf.writerows(lists)
