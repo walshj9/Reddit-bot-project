@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <title>
+    Reddit's Hot 150
+  </title>
+  <meta charset="utf-8" />
+  <meta name="Author" content="Joe Walsh" />
+  <meta name="generator" content="emacs" />
+  <link rel="shortcut icon" href="~walshj9/public_html/150.jpg"/>
+  <div id ="output"></div>
+  <style>
+	p{outline-color:blue;}
+	.pdfobject-container { height: 500px;}
+	.pdfobject { border: 1px solid #666; }
+	body{background-color:gray;}
+	a { text-decoration: none; }
+	p.solid{outline-style:solid;}
+  </style>
+
+
+	<h1>
+	Reddit's Top 150 Visualized
+	</h1>
+	
+</head>
+<button onclick="DispScoreGraph()">Display Graph of Scores</button>
+<button onclick="DispRatingGraph()">Display Graph of Approval Rating</button>
+<button onclick="DispOCGraph()">Display Graph of Original Content</button>
+<button onclick="DispSFWGraph()">Display Graph of Possible Adult Content</button>
+
+<body>
+	<script>
+	function DispScoreGraph() {
+	var x = document.getElementById("score_graph");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+		}
+	}
+	
+	function DispRatingGraph() {
+	var x = document.getElementById("rating_graph");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+		}
+	}
+	
+	function DispOCGraph() {
+	var x = document.getElementById("oc_graph");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+		}
+	}
+	
+	function DispSFWGraph() {
+	var x = document.getElementById("sfw_graph");
+	if (x.style.display === "none") {
+		x.style.display = "block";
+	} else {
+		x.style.display = "none";
+		}
+	}
+	</script>
+	<div id="score_graph">
+	<p class="solid" style="text-align:center;font-size:160%;">
+		<img id = "scores" src="scores.png" alt=""/>
+		<br>How much Karma does each post have?
+	</p>
+	</div>
+	<p>    </p>
+	<div id ="rating_graph">
+	<p class="solid" style="text-align:center;font-size:160%;">
+		<img id = "rating" src="rating.png" alt="Approval rating of each post"/>
+		<br>Of all votes, how many people approve of the post itself
+	</p>
+	</div>
+	<p>    </p>
+	<div id = "oc_graph">
+	<p class="solid" style="text-align:center;font-size:160%;">
+		<img id="oc" src="oc.png" alt="Original_content"/>
+		<br>Are these posts original?
+		<br>Note: Posts could be original, but not tagged as such
+	</p>
+	</div>
+	<p>    </p>
+	<div id="sfw_graph">
+	<p class="solid" style="text-align:center;font-size:160%;">
+	
+		<img id="sfw" src="sfw.png" alt="porn"/>
+		<br>Is it a good idea to open this post at work or in the library?
+	</p>
+	</div>
+	<p>
+	How was all of the data gathered?<br>The one line of code is:<br>
+	line = [str(submission.id),str(submission.title.replace(",","")),str(submission.subreddit.display_name), int(submission.score),int(submission.num_comments),<br>
+	str(submission.is_original_content), float(submission.upvote_ratio), submission.over_18, submission.permalink] 
+	</p>
+<footer style="border-top: 1px solid blue">
+ <a href="https://github.com/walshj9/Reddit-bot-project" 
+    title="github">
+    Project's Github
+ </a>
+
+<span style="float: right;">
+<a href="http://validator.w3.org/check/referer">HTML5</a> /
+<a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">
+    CSS3 </a>
+</span>
+</footer>
+
+</body>
+</html>
