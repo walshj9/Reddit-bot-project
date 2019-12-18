@@ -3,7 +3,8 @@ import praw
 import pandas
 import matplotlib.pyplot as plt
 import matplotlib.pyplot as yes
-from fpdf import FPDF
+from wordcloud import WordCloud, STOPWORDS
+
 
 with open('/home/walshj9/reddit-bot-data.txt') as log_files:
     info = log_files.read().splitlines()
@@ -17,16 +18,16 @@ reddit = praw.Reddit(user_agent=agent,
                      client_id=acc_id, client_secret=acc_secret,
                      username=uname, password=pw)
 
-#with open('reddit_data.csv','w') as f:
-#    writer = csv.writer(f)
-#    writer.writerow(['ID','Title','Subreddit','Karma', 'Comment_count', 'OC', 'Upvote_ratio', 'NSFW', 'Link'])
-#    lists = []
-#    for submission in reddit.subreddit('all').hot(limit=150):
-#        line = [str(submission.id),str(submission.title.replace(",","")),str(submission.subreddit.display_name), int(submission.score),int(submission.num_comments), str(submission.is_original_content), float(submission.upvote_ratio), submission.over_18, submission.permalink]
-#        lists.append(line)
-#    rf = csv.writer(f, dialect='excel')
-#    rf.writerows(lists)
-#f.close()
+with open('reddit_data.csv','w') as f:
+    writer = csv.writer(f)
+    writer.writerow(['ID','Title','Subreddit','Karma', 'Comment_count', 'OC', 'Upvote_ratio', 'NSFW', 'Link'])
+    lists = []
+    for submission in reddit.subreddit('all').hot(limit=150):
+        line = [str(submission.id),str(submission.title.replace(",","")),str(submission.subreddit.display_name), int(submission.score),int(submission.num_comments), str(submission.is_original_content), float(submission.upvote_ratio), submission.over_18, submission.permalink]
+        lists.append(line)
+    rf = csv.writer(f, dialect='excel')
+    rf.writerows(lists)
+f.close()
 
 
 colnames = ['ID','Title','Subreddit','Karma', 'Comment_count', 'OC', 'Upvote_ratio', 'NSFW', 'Link']
@@ -36,6 +37,7 @@ sfw = data.NSFW.tolist()#pie
 oc = data.OC.tolist()#pie
 ratio= data.Upvote_ratio.tolist()#line
 scores = data.Karma.tolist()#line
+titles=data.Title.tolist()
 
 subCount = {i:subs.count(i) for i in subs}
 
@@ -51,7 +53,7 @@ mean_line = plt.plot(range(150),ymean,label='Average -> '+str(score_avg),linesty
 legend=plt.legend(loc='upper right')
 plt.ylabel('Scores')
 plt.xlabel('Live Position')
-#plt.savefig('scores.png')
+plt.savefig('scores.png')
 plt.clf()
 
 trues = 0
@@ -68,7 +70,7 @@ colors = ['blue','red']
 plt.pie(sizes, explode=explode, labels=labels, colors = colors,
         autopct='%1.1f%%', shadow=True, startangle = 140)
 plt.axis('equal')
-#plt.savefig('sfw.png')
+plt.savefig('sfw.png')
 plt.clf() 
 
 orig = 0
@@ -85,7 +87,7 @@ colors = ['blue','gray']
 plt.pie(sizes,explode = explode, labels=labels, colors = colors,
         autopct='%1.1f%%', shadow=True, startangle = 90)
 plt.axis('equal')
-#plt.savefig('oc.png')
+plt.savefig('oc.png')
 plt.clf()
 
 rating = 0
@@ -99,7 +101,6 @@ avg_line = plt.plot(range(150),rate_mean,label = 'Average: '+str(rating), linest
 legend = plt.legend(loc= 'upper right')
 plt.ylabel('Rating')
 plt.xlabel('Index')
-#plt.savefig('rating.png')
+plt.savefig('rating.png')
 plt.clf()
-
 
